@@ -1,0 +1,32 @@
+ QPushButton#AnswerBtn{
+    padding:4px;
+    color: #fff;
+    font-size: 11px;
+    border: 1px solid #000000;
+	border-radius: 5px;
+	background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,
+                                        stop: 0 #00E400, stop: 1 #00B200);
+ }
+QPushButton#AnswerBtn:pressed {
+    color: #fff;
+    border: 1px solid #000000;
+	border-radius: 5px;
+	background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,
+                                        stop: 0 #4287ff, stop: 1 #356ccc);
+ }
+ 
+QPushButton#AddBtn{
+    padding:4px;
+    color: #111;
+    font-size: 11px;
+    border: 1px solid #000000;
+	background: #fff;
+	border-radius: 5px;
+ }
+QPushButton#AddBtn:pressed {
+    color: #fff;
+    border: 1px solid #000000;
+	border-radius: 5px;
+	background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,
+                                        stop: 0 #4287ff, stop: 1 #356ccc);
+ }
