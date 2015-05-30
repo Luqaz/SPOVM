@@ -16,6 +16,10 @@
 #include <mimetic/os/mmfile.h>
 #include <cstring>
 
+#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+#endif
+
 using namespace std;
 
 namespace mimetic

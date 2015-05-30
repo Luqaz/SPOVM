@@ -7,22 +7,25 @@
 #include "message.h"
 #include "base64.h"
 
-static bool createConnection()
+QSqlDatabase createConnection()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setDatabaseName("smail");
-    db.setUserName("root");
-    db.setHostName("localhost");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QString pathToDB = QDir::currentPath()+QString("/../../smail.db");
+    qDebug() << pathToDB;
+    db.setDatabaseName(pathToDB);
     if(!db.open())
     {
         qDebug() << "Cannot open database:" << db.lastError();
-        return false;
     }
-    return true;
+
+
+
+    return db;
 }
 
 void AddAccount(Account acc)
 {
+    QSqlDatabase db = createConnection();
     QSqlQuery query;
     QString str = "INSERT INTO accounts (email, password, smtp_server, pop3_server, smtp_port, pop3_port) "
                     "VALUES('%1', '%2', '%3', '%4', %5, %6);";
@@ -36,10 +39,25 @@ void AddAccount(Account acc)
     {
         qDebug() << "Unable to make insert operation";
     }
+    db.close();
+}
+
+void DeleteAccount(Account acc)
+{
+    QSqlDatabase db = createConnection();
+    QSqlQuery query;
+    QString str = "DELETE FROM accounts WHERE email = '%1'";
+    str = str.arg(acc.GetEmail());
+    if(!query.exec(str))
+    {
+        qDebug() << "Unable to make delete operation";
+    }
+    db.close();
 }
 
 void AddMessage(Message msg, Account acc)
 {
+    QSqlDatabase db = createConnection();
     QSqlQueryModel query;
     query.setQuery("SELECT id FROM accounts WHERE email = "+acc.GetEmail()+";");
     if(query.lastError().isValid())
@@ -69,10 +87,12 @@ void AddMessage(Message msg, Account acc)
     {
         qDebug() << "Unable to make insert operation";
     }
+    db.close();
 }
 
 QList<Message> GetMessages(Account acc)
 {
+    QSqlDatabase db = createConnection();
     QSqlQueryModel query;
     QList<Message> msgList;
     query.setQuery("SELECT id FROM accounts WHERE email = "+acc.GetEmail()+";");
@@ -100,11 +120,13 @@ QList<Message> GetMessages(Account acc)
         Message msg(from, to, subject, data, ct, cte, cs);
         msgList.push_back(msg);
     }
+    db.close();
     return msgList;
 }
 
 QList<Account> GetAccounts()
 {
+    QSqlDatabase db = createConnection();
     QSqlQueryModel query;
     QList<Account> accList;
     query.setQuery("SELECT * FROM accounts;");
@@ -123,6 +145,7 @@ QList<Account> GetAccounts()
         Account acc(email, base64_decode(pass), smtpServer, pop3Server, smtpPort, pop3Port);
         accList.push_back(acc);
     }
+    db.close();
     return accList;
 }
 

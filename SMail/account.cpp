@@ -103,3 +103,13 @@ QString Account::GetSMTPServer()
 {
     return SMTPServer;
 }
+
+
+bool Account::operator ==(Account some)
+{
+    if(this->Email == some.GetEmail())
+    {
+        return true;
+    }
+    else return false;
+}

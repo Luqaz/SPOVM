@@ -22,6 +22,7 @@ public:
     QString GetPassword();
     int GetSMTPport();
     int GetPOP3port();
+    bool operator==(Account some);
 };
 
 #endif // ACCOUNT_H
