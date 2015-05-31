@@ -35,29 +35,33 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(813, 493);
-        MainWindow->setMinimumSize(QSize(813, 493));
-        MainWindow->setMaximumSize(QSize(813, 493));
+        MainWindow->resize(798, 399);
+        MainWindow->setMinimumSize(QSize(798, 399));
+        MainWindow->setMaximumSize(QSize(798, 399));
+        MainWindow->setAutoFillBackground(false);
+        MainWindow->setStyleSheet(QStringLiteral(""));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        centralWidget->setStyleSheet(QStringLiteral("background-color:  rgb(255, 255, 255)"));
+        centralWidget->setStyleSheet(QStringLiteral(""));
         AccountList = new QListWidget(centralWidget);
         AccountList->setObjectName(QStringLiteral("AccountList"));
-        AccountList->setGeometry(QRect(10, 100, 256, 351));
+        AccountList->setGeometry(QRect(10, 10, 256, 351));
         AccountList->setResizeMode(QListView::Adjust);
         MessageList = new QListWidget(centralWidget);
         MessageList->setObjectName(QStringLiteral("MessageList"));
-        MessageList->setGeometry(QRect(270, 100, 521, 351));
+        MessageList->setGeometry(QRect(270, 10, 521, 351));
         MessageList->setResizeMode(QListView::Adjust);
         sendButton = new QPushButton(centralWidget);
         sendButton->setObjectName(QStringLiteral("sendButton"));
-        sendButton->setGeometry(QRect(714, 460, 81, 23));
+        sendButton->setGeometry(QRect(710, 370, 81, 23));
+        sendButton->setStyleSheet(QStringLiteral(""));
         addAccountButton = new QPushButton(centralWidget);
         addAccountButton->setObjectName(QStringLiteral("addAccountButton"));
-        addAccountButton->setGeometry(QRect(110, 460, 75, 23));
+        addAccountButton->setGeometry(QRect(110, 370, 75, 23));
         deleteButton = new QPushButton(centralWidget);
         deleteButton->setObjectName(QStringLiteral("deleteButton"));
-        deleteButton->setGeometry(QRect(190, 460, 75, 23));
+        deleteButton->setGeometry(QRect(190, 370, 75, 23));
+        deleteButton->setStyleSheet(QStringLiteral(""));
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);

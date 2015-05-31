@@ -113,4 +113,82 @@ void SMTPSender(Message &msg, Account &acc)
     socket.write("\r\n");
 }
 
+bool testAccount(Account &acc)
+{
+    QSslSocket socket;
+    socket.connectToHostEncrypted(acc.GetSMTPServer(), acc.GetSMTPport());
+    if (!socket.waitForEncrypted()) {
+        qDebug() << socket.errorString();
+    }
+    socket.write("EHLO SMail");
+
+        qDebug() << "EHLO SMail";
+    socket.write("\r\n");
+    while (socket.waitForReadyRead(5000))
+        qDebug() << socket.readAll().data();
+    socket.write("AUTH LOGIN");
+    socket.write("\r\n");
+        qDebug() << "AUTH LOGIN";
+    while (socket.waitForReadyRead(5000))
+        qDebug() << socket.readAll().data();
+
+    QString UserName;
+    if(acc.GetSMTPServer() == "smtp.gmail.com" || acc.GetSMTPServer() == "smtp.aol.com" || acc.GetSMTPServer() == "smtp.yandex.ru")
+    {
+        QStringList some = acc.GetEmail().split("@");
+        UserName = some[0];
+        char* asd = base64_encode(UserName).toUtf8().data();
+        socket.write(asd);
+        socket.write("\r\n");
+        qDebug() << asd;
+        while (socket.waitForReadyRead(1000))
+            qDebug() << socket.readAll().data();
+        asd = base64_encode(acc.GetPassword()).toUtf8().data();
+        socket.write(asd);
+        socket.write("\r\n");
+        qDebug() << asd;
+        QString response;
+        while (socket.waitForReadyRead(1000))
+            response = socket.readAll().data();
+        response = response.split(" ")[0];
+        qDebug() << response;
+        if(response[0] == '2') return true;
+        else return false;
+    }
+    else if(acc.GetSMTPServer() == "smtp.mail.yahoo.com")
+    {
+        socket.write(base64_encode(acc.GetEmail()).toUtf8().constData());
+        socket.write("\r\n");
+        while (socket.waitForReadyRead(1000))
+            qDebug() << socket.readAll().data();
+        socket.write(base64_encode(acc.GetPassword()).toUtf8().constData());
+        socket.write("\r\n");
+        QString response;
+        while (socket.waitForReadyRead(1000))
+            response = socket.readAll().data();
+        response = response.split(" ")[0];
+        qDebug() << response;
+        if(response[0] == '2') return true;
+        else return false;
+    }
+    else if(acc.GetSMTPServer() == "smtp.mail.ru" || acc.GetSMTPServer() == "mail.rambler.ru")
+    {
+        socket.write(base64_encode(acc.GetEmail()).toUtf8().constData());
+        socket.write("\r\n");
+        qDebug() << acc.GetEmail().toUtf8().constData();
+        while (socket.waitForReadyRead(1000))
+            qDebug() << socket.readAll().data();
+        socket.write(base64_encode(acc.GetPassword()).toUtf8().constData());
+        socket.write("\r\n");
+        qDebug() << acc.GetPassword().toUtf8().constData();
+        QString response;
+        while (socket.waitForReadyRead(1000))
+            response = socket.readAll().data();
+        response = response.split(" ")[0];
+        qDebug() << response;
+        if(response[0] == '2') return true;
+        else return false;
+    }
+}
+
 #endif // SMTPSENDER_H

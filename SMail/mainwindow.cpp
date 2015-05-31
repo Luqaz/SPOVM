@@ -52,10 +52,13 @@ void MainWindow::on_addAccountButton_clicked()
     if(inputDialog->exec() == QDialog::Accepted)
     {
         Account newAcc(inputDialog->getEmail(), inputDialog->getPassword(), inputDialog->getHost());
-        userAccounts.push_back(newAcc);
-        userNames.push_back(inputDialog->getEmail());
-        ui->AccountList->addItem(newAcc.GetEmail());
-        AddAccount(newAcc);
+        if(testAccount(newAcc))
+        {
+            userAccounts.push_back(newAcc);
+            userNames.push_back(inputDialog->getEmail());
+            ui->AccountList->addItem(newAcc.GetEmail());
+            AddAccount(newAcc);
+        }
     }
     delete inputDialog;
 }
@@ -75,7 +78,7 @@ void MainWindow::on_AccountList_itemDoubleClicked(QListWidgetItem *item)
     ui->MessageList->clear();
     foreach (Message msg, userMessages[i])
     {
-        ui->MessageList->addItem(msg.GetSubject());
+        ui->MessageList->addItem(msg.GetSender());
     }
 }
 
