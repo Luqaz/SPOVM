@@ -52,3 +52,12 @@ QString Message::GetCS()
 {
     return charset;
 }
+
+bool Message::operator ==(Message msg)
+{
+    if(this->GetSender() == msg.GetSender() && this->GetSubject() == msg.GetSubject() && this->GetReceivers()[0] == msg.GetReceivers()[0] && this->GetData() == msg.GetData())
+    {
+        return true;
+    }
+    return false;
+}

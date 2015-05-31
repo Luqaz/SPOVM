@@ -15,7 +15,7 @@
 
 #include "mimepp/mimepp.h"
 
-QList<Message> POP3Receiver(Account &acc)
+QList<Message> POP3Receiver(Account &acc, int frompos)
 {
     QSslSocket socket;
     socket.connectToHostEncrypted(acc.GetPOP3Server(), acc.GetPOP3port());
@@ -76,7 +76,7 @@ QList<Message> POP3Receiver(Account &acc)
     QProgressDialog progress("Taking emails...", "Cancel", 0, num);
     progress.setWindowModality(Qt::WindowModal);
 
-    for(int i=num; i>=1; i--)
+    for(int i=num; i>=frompos+1; i--)
     {
         progress.setValue(num - i);
         QCoreApplication::processEvents();

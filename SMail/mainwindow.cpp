@@ -35,11 +35,30 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     QList<Account> oldUserAccounts = GetAccounts();
-    foreach(Account user, userAccounts)
+    QList<QList<Message>> oldUserMessages;
+    for(int i = 0; i < oldUserAccounts.length(); i++)
     {
-        if(!oldUserAccounts.contains(user))
+        oldUserMessages[i] = GetMessages(oldUserAccounts[i]);
+    }
+    for(int i = 0; i< userAccounts.length(); i++)
+    {
+        if(!oldUserAccounts.contains(userAccounts[i]))
         {
-            AddAccount(user);
+            AddAccount(userAccounts[i]);
+            foreach(Message msg, userMessages[i])
+            {
+                AddMessage(msg, userAccounts[i]);
+            }
+        }
+        else
+        {
+            foreach (Message msg, userMessages[i])
+            {
+                if(!oldUserMessages[i].contains(msg))
+                {
+                    AddMessage(msg, userAccounts[i]);
+                }
+            }
         }
     }
     delete ui;
@@ -73,7 +92,7 @@ void MainWindow::on_AccountList_itemDoubleClicked(QListWidgetItem *item)
     }
     if(userMessages[i].isEmpty() || userMessages[i].count() < getStat(userAccounts[i]))
     {
-        userMessages[i] = POP3Receiver(userAccounts[i]);
+        userMessages[i] = POP3Receiver(userAccounts[i], userMessages[i].count());
     }
     ui->MessageList->clear();
     foreach (Message msg, userMessages[i])

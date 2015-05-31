@@ -22,6 +22,7 @@ public:
     QString GetCT();
     QString GetCTE();
     QString GetCS();
+    bool operator ==(Message msg);
 };
 #endif // MESSAGE_H
 
